@@ -10,6 +10,7 @@
         body{text-align:center;}
         #enterDetails {float: left; width: 50%; background-color: darkolivegreen; color: lightskyblue;}
         #findDetails {float: left; width: 50%; background-color: lightskyblue; color: darkolivegreen;}
+        #dataPrint.center {margin:auto; background-color: burlywood; color: coral;}
         #ProfileApp.center {margin:auto; width: 50%;}
         #banner{background-color: darkgoldenrod;}
         input {width: 120px;}
@@ -55,7 +56,7 @@
         <h4 id = "showAge1" type="number"></h4>
         <h4 id = "showID2" type="number"></h4>
         <h4 id = "showName2" type="text"></h4>
-        <h4 id = "showAge2" type="number"></h4>
+        <h4 id = "showAge2" type="number"></h4> <br><br>
 
     </div>
 
@@ -161,6 +162,39 @@
         updateBTN.addEventListener('click', UpdateData);
         removeBTN.addEventListener('click', RemoveData);
         findBTN.addEventListener('click', FindData);
+
+
+        // Function to display user profiles
+        function displayUserProfiles() {
+            const userIDs = ["01", "02"]; 
+            
+            userIDs.forEach(userID => {
+                const userRef = ref(db, `People/${userID}`);
+
+                get(userRef)
+                    .then((snapshot) => {
+                        if (snapshot.exists()) {
+                            const user = snapshot.val();
+                            // Update the HTML elements with user data
+                            const userNameElement = document.querySelector(`#${userID}Name`);
+                            const userAgeElement = document.querySelector(`#${userID}Age`);
+                            if (userNameElement && userAgeElement) {
+                                userNameElement.textContent = `Name: ${user.Name}`;
+                                userAgeElement.textContent = `Age: ${user.Age}`;
+                            }
+                        } else {
+                            console.error(`User with ID ${userID} not found`);
+                        }
+                    })
+                    .catch((error) => {
+                        console.error(`Error fetching user profile for ID ${userID}: ${error.message}`);
+                    });
+            });
+        }
+
+        // Call the function to display user profiles when the page loads
+        window.onload = displayUserProfiles;
+    </script>
 
     </script>
     
