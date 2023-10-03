@@ -164,10 +164,9 @@
         findBTN.addEventListener('click', FindData);
 
 
-        // Function to display user profiles
         function displayUserProfiles() {
             const userIDs = ["01", "02"]; 
-            
+
             userIDs.forEach(userID => {
                 const userRef = ref(db, `People/${userID}`);
 
@@ -175,7 +174,6 @@
                     .then((snapshot) => {
                         if (snapshot.exists()) {
                             const user = snapshot.val();
-                            // Update the HTML elements with user data
                             const userNameElement = document.querySelector(`#${userID}Name`);
                             const userAgeElement = document.querySelector(`#${userID}Age`);
                             if (userNameElement && userAgeElement) {
@@ -192,10 +190,7 @@
             });
         }
 
-        // Call the function to display user profiles when the page loads
         window.onload = displayUserProfiles;
-    </script>
-
     </script>
     
 </body>
