@@ -10,8 +10,8 @@
         body{text-align:center;}
         #enterDetails {float: left; width: 50%; background-color: darkolivegreen; color: lightskyblue;}
         #findDetails {float: left; width: 50%; background-color: lightskyblue; color: darkolivegreen;}
-        #dataPrint.center {margin:auto; background-color: burlywood; color: coral;}
-        #ProfileApp.center {margin:auto; width: 50%;}
+        #dataPrint {margin:auto; background-color: burlywood; color: coral;}
+        #ProfileApp {margin:auto; width: 50%;}
         #banner{background-color: darkgoldenrod;}
         input {width: 120px;}
     </style>
@@ -51,10 +51,10 @@
     </div>
 
     <div id="dataPrint">
-        <h4 id = "showID1" type="number"></h4>
+        <h4 id = "showID1" type="number">01</h4>
         <h4 id = "showName1" type="text"></h4>
         <h4 id = "showAge1" type="number"></h4>
-        <h4 id = "showID2" type="number"></h4>
+        <h4 id = "showID2" type="number">02</h4>
         <h4 id = "showName2" type="text"></h4>
         <h4 id = "showAge2" type="number"></h4> <br><br>
 
@@ -100,6 +100,13 @@
         var updateBTN = document.querySelector("#update");
         var removeBTN = document.querySelector("#remove");
         var findBTN = document.querySelector("#find");
+
+        var showID1 = document.querySelector("#showID1");
+        var showID2 = document.querySelector("#showID2");
+        var showName1 = document.querySelector("#showName1");
+        var showName2 = document.querySelector("#showName2");
+        var showAge1 = document.querySelector("#showAge1");
+        var showAge2 = document.querySelector("#showAge2");
  
         function InsertData() {
             set(ref(db, "People/" + enterID.value),  {
@@ -163,34 +170,33 @@
         removeBTN.addEventListener('click', RemoveData);
         findBTN.addEventListener('click', FindData);
 
+        function showData() {
+            const dbref = ref(db);
 
-        function displayUserProfiles() {
-            const userIDs = ["01", "02"]; 
-
-            userIDs.forEach(userID => {
-                const userRef = ref(db, `People/${userID}`);
-
-                get(userRef)
-                    .then((snapshot) => {
-                        if (snapshot.exists()) {
-                            const user = snapshot.val();
-                            const userNameElement = document.querySelector(`#${userID}Name`);
-                            const userAgeElement = document.querySelector(`#${userID}Age`);
-                            if (userNameElement && userAgeElement) {
-                                userNameElement.textContent = `Name: ${user.Name}`;
-                                userAgeElement.textContent = `Age: ${user.Age}`;
-                            }
-                        } else {
-                            console.error(`User with ID ${userID} not found`);
-                        }
-                    })
-                    .catch((error) => {
-                        console.error(`Error fetching user profile for ID ${userID}: ${error.message}`);
-                    });
-            });
+            get(child(dbref, "People/01"))
+            .then((snapshot)=>{
+                if (snapshot.exists()) {
+                    showName1.innerHTML = "Name: " + snapshot.val().Name;
+                    showAge1.innerHTML = "Age: " + snapshot.val().Age;
+                } else{
+                    console.error(`User with ID 01 not found`);
+                }
+            })
+            get(child(dbref, "People/02"))
+            .then((snapshot)=>{
+                if (snapshot.exists()) {
+                    showName2.innerHTML = "Name: " + snapshot.val().Name;
+                    showAge2.innerHTML = "Age: " + snapshot.val().Age;
+                } else{
+                    console.error(`User with ID 02 not found`);
+                }
+            })
+            .catch((error)=>{
+                alert(error);
+            })
+            
         }
-
-        window.onload = displayUserProfiles;
+        window.onload = showData();
     </script>
     
 </body>
